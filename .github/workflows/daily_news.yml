@@ -1,0 +1,40 @@
+name: Daily News Agent
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 毎朝9時 JST（UTC 0時）
+  workflow_dispatch:      # 手動実行も可能
+
+permissions:
+  contents: write
+
+jobs:
+  collect-news:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run news agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          claude -p "
+            /news-collector を実行してください。
+            今日の日付は ${DATE} です。
+          " \
+          --allowedTools "web_search,Write,Read,Bash" \
+          --dangerously-skip-permissions \
+          --output-format text
+
+      - name: Commit & Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/
+          git diff --cached --quiet || git commit -m "🤖 Update news $(date +'%Y-%m-%d')"
+          git push
