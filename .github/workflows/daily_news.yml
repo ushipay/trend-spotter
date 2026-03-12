@@ -2,7 +2,7 @@ name: Daily News Agent
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 毎朝9時 JST（UTC 0時）
+    - cron: '0 0 1,15 * *'  # 毎朝9時 JST（UTC 0時）
   workflow_dispatch:      # 手動実行も可能
 
 permissions:
@@ -24,7 +24,7 @@ jobs:
         run: |
           DATE=$(date +'%Y-%m-%d')
           claude -p "
-            /trend-collector を実行してください。
+            /trend-spotter を実行してください。
             今日の日付は ${DATE} です。
           " \
           --allowedTools "web_search,Write,Read,Bash" \
