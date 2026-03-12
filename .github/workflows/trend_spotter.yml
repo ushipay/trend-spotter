@@ -1,4 +1,4 @@
-name: Daily News Agent
+name: Trend Spotter Agent
 
 on:
   schedule:
