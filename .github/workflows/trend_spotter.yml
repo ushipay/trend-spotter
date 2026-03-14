@@ -1,8 +1,8 @@
 name: Trend Spotter Agent
 
 on:
-  schedule:
-    - cron: '0 0 1,15 * *'  # 1,15日の9時に実行
+  # schedule:
+  #   - cron: '0 0 1,15 * *'  # 1,15日の9時に実行
   workflow_dispatch:      # 手動実行も可能
 
 permissions:
